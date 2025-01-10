@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Tournament</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeInDown 1s ease-out;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #000000;
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #58a6ff;
+            color: #0d1117;
+        }
+
+        .main {
+            padding: 2rem;
+            text-align: center;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .tournament-form {
+            max-width: 600px;
+            margin: auto;
+            padding: 2rem;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tournament-form label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .tournament-form input[type="text"] {
+            width: calc(100% - 1rem);
+            padding: 0.5rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .player-columns {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .player-columns .column {
+            width: 45%;
+        }
+
+        .button {
+            background-color: #00ddff;
+            border: none;
+            color: #000000;
+            padding: 1rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.1rem;
+            margin: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #083c4f;
+            color: #ffffff;
+            border-radius: 25px;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Animation for CHAMP */
+        .champ-animation {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            position: relative;
+            display: inline-block;
+            color: #bb86fc;
+            animation: colorChange 5s infinite, fadeInDown 1s ease-out;
+        }
+
+        @keyframes colorChange {
+            0% {
+                color: #bb86fc;
+            }
+
+            25% {
+                color: #3700b3;
+            }
+
+            50% {
+                color: #03dac5;
+            }
+
+            75% {
+                color: #bb86fc;
+            }
+
+            100% {
+                color: #3700b3;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <script>
+        function validateForm() {
+            let inputs = document.querySelectorAll('.tournament-form input[type="text"]');
+            for (let input of inputs) {
+                if (input.value.trim() === "") {
+                    alert("Please fill out all fields.");
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <button class="back-button" onclick="history.back()">←</button>
+        <h1 class="champ-animation">Create New Tournament</h1>
+        <p>Fill in the details to create a new tournament.</p>
+    </div>
+    <div class="main">
+        <form class="tournament-form" method="POST" action="/create" onsubmit="return validateForm()">
+            <label for="tournament-name">Tournament Name:</label>
+            <input type="text" id="tournament-name" name="tournament-name" required>
+
+            <label for="players">Tournament Players:</label>
+            <div id="players" class="player-columns">
+                <div class="column">
+                    <input type="text" name="player1" placeholder="Player 1" required>
+                    <input type="text" name="player2" placeholder="Player 2" required>
+                    <input type="text" name="player3" placeholder="Player 3" required>
+                    <input type="text" name="player4" placeholder="Player 4" required>
+                    <input type="text" name="player5" placeholder="Player 5" required>
+                    <input type="text" name="player6" placeholder="Player 6" required>
+                    <input type="text" name="player7" placeholder="Player 7" required>
+                    <input type="text" name="player8" placeholder="Player 8" required>
+                </div>
+                <div class="column">
+                    <input type="text" name="player9" placeholder="Player 9" required>
+                    <input type="text" name="player10" placeholder="Player 10" required>
+                    <input type="text" name="player11" placeholder="Player 11" required>
+                    <input type="text" name="player12" placeholder="Player 12" required>
+                    <input type="text" name="player13" placeholder="Player 13" required>
+                    <input type="text" name="player14" placeholder="Player 14" required>
+                    <input type="text" name="player15" placeholder="Player 15" required>
+                    <input type="text" name="player16" placeholder="Player 16" required>
+                </div>
+            </div>
+
+            <button type="submit" class="button">Generate Tournament</button>
+
+        </form>
+    </div>
+    <div class="footer">
+        <p>© 2025 Competition Management. All rights reserved.</p>
+    </div>
+</body>
+
+</html>
