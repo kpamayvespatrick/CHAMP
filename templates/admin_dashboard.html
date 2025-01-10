@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1e1e2f;
+            color: #dcdcdc;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #252538;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #3a3a55;
+        }
+
+        header h1 {
+            color: #f4f4f4;
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .round-selector-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .round-selector {
+            padding: 0.7rem;
+            font-size: 1rem;
+            background-color: #2b2b3f;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .round-selector:hover {
+            background-color: #3d3d56;
+            transform: scale(1.05);
+        }
+
+        .match-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .match {
+            background-color: #252538;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .match:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .match-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #58a6ff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .player {
+            display: flex;
+            justify-content: space-between;
+            background-color: #2f2f44;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .player.winner {
+            background-color: #16a34a;
+        }
+
+        .player.loser {
+            background-color: #dc2626;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        input[type="number"] {
+            padding: 0.6rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+            background-color: #2f2f44;
+            color: #ffffff;
+        }
+
+        input[type="number"]:focus {
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.7);
+        }
+
+        button {
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            background-color: #1e40af;
+        }
+
+        .clear-button {
+            margin: 2rem auto;
+            display: block;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #dc2626;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .clear-button:hover {
+            background-color: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .clear-button:active {
+            background-color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+
+    <!-- Round Selector -->
+    <div class="round-selector-container">
+        <select class="round-selector" id="round-selector" onchange="switchRound(this.value)">
+            {% for round_number in range(1, max_round + 1) %}
+            <option value="{{ round_number }}" {% if round_number == current_round %}selected{% endif %}>
+                Round {{ round_number }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Match Container -->
+    <div class="match-container">
+        {% for match in matches %}
+        <div class="match">
+            <div class="match-header">Match {{ loop.index }}</div>
+            <div class="player {% if match.winner_id == match.player1.id %}winner{% else %}loser{% endif %}">
+                <span>{{ match.player1.name }}</span>
+                <span>{{ match.player1_score or '-' }}</span>
+            </div>
+            <div class="player {% if match.winner_id == match.player2.id %}winner{% else %}loser{% endif %}">
+                <span>{{ match.player2.name }}</span>
+                <span>{{ match.player2_score or '-' }}</span>
+            </div>
+            <form method="POST" action="/update_match">
+                <input type="hidden" name="match_id" value="{{ match.id }}">
+                <input type="number" name="player1_score" placeholder="Player 1 Score" value="{{ match.player1_score }}">
+                <input type="number" name="player2_score" placeholder="Player 2 Score" value="{{ match.player2_score }}">
+                <button type="submit">Submit Scores</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Clear Database Button -->
+    <form method="POST" action="/clear_database">
+        <button type="submit" class="clear-button">Clear All Database Entries</button>
+    </form>
+
+    <script>
+        function switchRound(roundNumber) {
+            const url = `/admin?round=${roundNumber}`;
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

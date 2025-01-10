@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tournaments</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #161b22;
+            color: #58a6ff;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 2rem;
+            top: 10%;
+            transform: translateY(-50%);
+            background-color: #000000;
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #58a6ff;
+            color: #0d1117;
+        }
+
+        .tournament-list {
+            max-width: 800px;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tournament-item {
+            background-color: #21262d;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .tournament-item:hover {
+            background-color: #30363d;
+            transform: scale(1.03);
+        }
+
+        .tournament-item a {
+            text-decoration: none;
+            color: #58a6ff;
+            font-size: 1.2rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 1rem;
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            padding: 0.5rem 1.5rem;
+            background-color: #58a6ff;
+            border: none;
+            border-radius: 8px;
+            color: #0d1117;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1f6feb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="back-button">← Back to Home</a>
+        <h1>Available Tournaments</h1>
+    </div>
+    <div class="tournament-list">
+        {% for tournament in tournaments %}
+        <div class="tournament-item">
+            <p>{{ tournament.name }}</p>
+            <form method="GET" action="{{ url_for('generate_tournament', tournament_id=tournament.id) }}">
+                <button type="submit"></button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tournament.name }} - Tournament Bracket</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #161b22;
+            color: #58a6ff;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 2rem;
+            top: 10%;
+            transform: translateY(-50%);
+            background-color: #000000;
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #58a6ff;
+            color: #0d1117;
+        }
+
+        .bracket {
+            display: flex;
+            justify-content: flex-start;
+            margin: 2rem;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-right: 2rem;
+        }
+
+        .match {
+            display: flex;
+            flex-direction: column;
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #21262d;
+            border-radius: 8px;
+            width: 240px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            position: relative;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .match:hover {
+            transform: scale(1.05);
+            background-color: #30363d;
+        }
+
+        .player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .player.winner {
+            background-color: #10704f;
+            color: #ffffff;
+        }
+
+        .player.loser {
+            background-color: #972732;
+            color: #ffffff;
+        }
+
+        .connector {
+            height: 2px;
+            width: 40px;
+            background-color: #58a6ff;
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            animation: grow-horizontal 0.5s ease forwards;
+        }
+
+        .connector.vertical {
+            height: 50px;
+            width: 2px;
+            background-color: #58a6ff;
+            position: absolute;
+            top: 0;
+            left: calc(100% + 20px);
+            animation: grow-vertical 0.5s ease forwards;
+        }
+
+        @keyframes grow-horizontal {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 40px;
+            }
+        }
+
+        @keyframes grow-vertical {
+            from {
+                height: 0;
+            }
+
+            to {
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-button" onclick="history.back()">←</button>
+        <h1>{{ tournament.name }} - Tournament Bracket</h1>
+    </div>
+    <div class="bracket">
+        {% for round in rounds %}
+        <div class="round">
+            <h2>Round {{ loop.index }}</h2>
+            {% for match in round %}
+            <div class="match">
+                <div class="player {{ 'winner' if match.winner_id == match.player1_id else 'loser' }}">
+                    <span>{{ match.player1.name }}</span>
+                    <span>{{ match.player1_score }}</span>
+                </div>
+                <div class="player {{ 'winner' if match.winner_id == match.player2_id else 'loser' }}">
+                    <span>{{ match.player2.name }}</span>
+                    <span>{{ match.player2_score }}</span>
+                </div>
+                <div class="connector"></div>
+            </div>
+            <div class="connector vertical"></div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
